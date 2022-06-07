@@ -1,25 +1,113 @@
 // Providers often supply types with their API libraries.
 
-export interface AcmeUser {
+export interface DataStaxDatabase {
   id: string;
-  name: string;
+  ownerId: string;
+  info: {
+    name: string;
+    keyspaces: string[];
+    datacenters: {
+      id: string;
+      name: string;
+      status: string;
+      tier: string;
+      cloudProvider: string;
+      region: string;
+      regionZone: string;
+      regionClassification: string;
+      capacityUnits: string;
+      secureBundleUrl: string;
+      secureBundleInternalUrl: string;
+      secureBundleMigrationProxyUrl: string;
+      secureBundleMigrationProxyInternalUrl: string;
+      dateCreated: string;
+    }[];
+    keyspace: string;
+    cloudProvider: string;
+    tier: string;
+    capacityUnits: string;
+    region: string;
+  };
+  creationTime: string;
+  terminationTime: string;
+  status: string;
+  storage: {
+    nodeCount: number;
+    replicationFactor: number;
+    totalStorage: number;
+  };
+  metrics: {
+    writeRequestsTotalCount: number;
+    readRequestsTotalCount: number;
+    liveDataSizeBytes: number;
+    errorsTotalCount: number;
+  };
+  cost: {
+    costPerMinCents: number;
+    costPerHourCents: number;
+    costPerDayCents: number;
+    costPerMonthCents: number;
+    costPerMinMRCents: number;
+    costPerHourMRCents: number;
+    costPerDayMRCents: number;
+    costPerMonthMRCents: number;
+    costPerMinParkedCents: number;
+    costPerHourParkedCents: number;
+    costPerDayParkedCents: number;
+    costPerMonthParkedCents: number;
+    costPerNetworkGbCents: number;
+    costPerWrittenGbCents: number;
+    costPerReadGbCents: number;
+  };
+  availableActions: string[];
+  studioUrl: string;
+  grafanaUrl: string;
+  cqlshUrl: string;
+  graphqlUrl: string;
+  dataEndpointUrl: string;
+  lastUsageTime: string;
+  observedStatus: string;
 }
 
-export interface AcmeGroup {
-  id: string;
-  name: string;
-  users?: Pick<AcmeUser, 'id'>[];
+export interface DataStaxAccessList {
+  organizationId: string;
+  databaseId: string;
+  addresses: DataStaxIPAddress[];
+  configurations: {
+    accessListEnabled: boolean;
+  };
 }
 
-// Those can be useful to a degree, but often they're just full of optional
-// values. Understanding the response data may be more reliably accomplished by
-// reviewing the API response recordings produced by testing the wrapper client
-// (./client.ts). However, when there are no types provided, it is necessary to define
-// opaque types for each resource, to communicate the records that are expected
-// to come from an endpoint and are provided to iterating functions.
+export interface DataStaxIPAddress {
+  address: string;
+  description: string;
+  enabled: boolean;
+  lastUpdateDateTime: string;
+}
 
-/*
-import { Opaque } from 'type-fest';
-export type AcmeUser = Opaque<any, 'AcmeUser'>;
-export type AcmeGroup = Opaque<any, 'AcmeGroup'>;
-*/
+export interface DataStaxUsers {
+  OrgID: string;
+  OrgName: string;
+  Users: DataStaxUser[];
+}
+
+export interface DataStaxUser {
+  UserID: string;
+  Email: string;
+  Status: string;
+  Roles: DataStaxRole[];
+}
+
+export interface DataStaxRole {
+  ID: string;
+  id: string;
+  name: string;
+  policy?: {
+    description: string;
+    resources: string[];
+    actions: string[];
+    effect: string;
+  };
+  last_update_date_time?: string;
+  last_update_user_id?: string;
+}

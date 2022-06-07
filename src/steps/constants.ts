@@ -5,76 +5,80 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 export const Steps = {
-  ACCOUNT: 'fetch-account',
+  ORGANIZATION: 'fetch-organization',
+  DATABASES: 'fetch-databases',
+  IP_ADDRESSES: 'fetch-ip-addresses',
   USERS: 'fetch-users',
-  GROUPS: 'fetch-groups',
-  GROUP_USER_RELATIONSHIPS: 'build-user-group-relationships',
+  ACCESS_ROLES: 'fetch-access-roles',
 };
 
 export const Entities: Record<
-  'ACCOUNT' | 'GROUP' | 'USER',
+  'ORGANIZATION' | 'DATABASE' | 'IP_ADDRESS' | 'USER' | 'ACCESS_ROLE',
   StepEntityMetadata
 > = {
-  ACCOUNT: {
-    resourceName: 'Account',
-    _type: 'acme_account',
-    _class: ['Account'],
-    schema: {
-      properties: {
-        mfaEnabled: { type: 'boolean' },
-        manager: { type: 'string' },
-      },
-      required: ['mfaEnabled', 'manager'],
-    },
+  ORGANIZATION: {
+    resourceName: 'Organization',
+    _type: 'datastax_organization',
+    _class: ['Organization'],
   },
-  GROUP: {
-    resourceName: 'UserGroup',
-    _type: 'acme_group',
-    _class: ['UserGroup'],
-    schema: {
-      properties: {
-        email: { type: 'string' },
-        logoLink: { type: 'string' },
-      },
-      required: ['email', 'logoLink'],
-    },
+  DATABASE: {
+    resourceName: 'Database',
+    _type: 'datastax_database',
+    _class: ['Database'],
+  },
+  IP_ADDRESS: {
+    resourceName: 'IP Address',
+    _type: 'datastax_ip_address',
+    _class: ['IpAddress'],
   },
   USER: {
     resourceName: 'User',
-    _type: 'acme_user',
+    _type: 'datastax_user',
     _class: ['User'],
-    schema: {
-      properties: {
-        username: { type: 'string' },
-        email: { type: 'string' },
-        active: { type: 'boolean' },
-        firstName: { type: 'string' },
-      },
-      required: ['username', 'email', 'active', 'firstName'],
-    },
+  },
+  ACCESS_ROLE: {
+    resourceName: 'Access Role',
+    _type: 'datastax_access_role',
+    _class: ['AccessRole'],
   },
 };
 
 export const Relationships: Record<
-  'ACCOUNT_HAS_USER' | 'ACCOUNT_HAS_GROUP' | 'GROUP_HAS_USER',
+  | 'ORGANIZATION_HAS_DATABASE'
+  | 'DATABASE_ALLOWS_IP_ADDRESS'
+  | 'ORGANIZATION_HAS_ACCESS_ROLE'
+  | 'ORGANIZATION_HAS_USER'
+  | 'USER_HAS_ACCESS_ROLE',
   StepRelationshipMetadata
 > = {
-  ACCOUNT_HAS_USER: {
-    _type: 'acme_account_has_user',
-    sourceType: Entities.ACCOUNT._type,
+  ORGANIZATION_HAS_DATABASE: {
+    _type: 'datastax_organization_has_database',
+    sourceType: Entities.ORGANIZATION._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.DATABASE._type,
+  },
+  DATABASE_ALLOWS_IP_ADDRESS: {
+    _type: 'datastax_database_allows_ip_address',
+    sourceType: Entities.DATABASE._type,
+    _class: RelationshipClass.ALLOWS,
+    targetType: Entities.IP_ADDRESS._type,
+  },
+  ORGANIZATION_HAS_ACCESS_ROLE: {
+    _type: 'datastax_organization_has_access_role',
+    sourceType: Entities.ORGANIZATION._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.DATABASE._type,
+  },
+  ORGANIZATION_HAS_USER: {
+    _type: 'datastax_organization_has_user',
+    sourceType: Entities.ORGANIZATION._type,
     _class: RelationshipClass.HAS,
     targetType: Entities.USER._type,
   },
-  ACCOUNT_HAS_GROUP: {
-    _type: 'acme_account_has_group',
-    sourceType: Entities.ACCOUNT._type,
+  USER_HAS_ACCESS_ROLE: {
+    _type: 'datastax_user_has_access_role',
+    sourceType: Entities.USER._type,
     _class: RelationshipClass.HAS,
-    targetType: Entities.GROUP._type,
-  },
-  GROUP_HAS_USER: {
-    _type: 'acme_group_has_user',
-    sourceType: Entities.GROUP._type,
-    _class: RelationshipClass.HAS,
-    targetType: Entities.USER._type,
+    targetType: Entities.ACCESS_ROLE._type,
   },
 };
