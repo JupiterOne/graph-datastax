@@ -20,24 +20,15 @@ test('fetch-users', async () => {
   expect(stepResult).toMatchStepMetadata(stepConfig);
 });
 
-test('fetch-groups', async () => {
+test('build-user-role-relationships', async () => {
   recording = setupProjectRecording({
     directory: __dirname,
-    name: 'fetch-groups',
+    name: 'build-user-role-relationships',
   });
 
-  const stepConfig = buildStepTestConfigForStep(Steps.GROUPS);
-  const stepResult = await executeStepWithDependencies(stepConfig);
-  expect(stepResult).toMatchStepMetadata(stepConfig);
-});
-
-test('build-user-group-relationships', async () => {
-  recording = setupProjectRecording({
-    directory: __dirname,
-    name: 'build-user-group-relationships',
-  });
-
-  const stepConfig = buildStepTestConfigForStep(Steps.GROUP_USER_RELATIONSHIPS);
+  const stepConfig = buildStepTestConfigForStep(
+    Steps.BUILD_USER_ROLE_RELATIONSHIPS,
+  );
   const stepResult = await executeStepWithDependencies(stepConfig);
   expect(stepResult).toMatchStepMetadata(stepConfig);
 });
