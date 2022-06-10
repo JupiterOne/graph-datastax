@@ -23,10 +23,11 @@ export async function fetchDatabases({
     ORGANIZATION_ENTITY_KEY,
   )) as Entity;
 
-  await apiClient.fetchDatabases(async (database) => {
+  await apiClient.iterateDatabases(async (database) => {
     const databaseEntity = await jobState.addEntity(
       createDatabaseEntity(database),
     );
+
     await jobState.addRelationship(
       createOrganizationDatabaseRelationship(
         organizationEntity,

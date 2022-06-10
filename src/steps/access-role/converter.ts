@@ -2,6 +2,7 @@ import {
   createDirectRelationship,
   createIntegrationEntity,
   Entity,
+  parseTimePropertyValue,
   Relationship,
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
@@ -14,6 +15,8 @@ export function getRoleKey(id: string): string {
 }
 
 export function createAccessRoleEntity(role: DataStaxRole): Entity {
+  const updatedOn = parseTimePropertyValue(role.last_update_date_time);
+
   return createIntegrationEntity({
     entityData: {
       source: role,
@@ -23,9 +26,12 @@ export function createAccessRoleEntity(role: DataStaxRole): Entity {
         _key: getRoleKey(role.id),
         id: role.id,
         name: role.name,
-        info: JSON.stringify(role.policy),
-        lastUpdateDateTime: role.last_update_date_time,
-        lastUpdateUserId: role.last_update_user_id,
+        'policy.description': role.policy?.description,
+        'policy.resources': role.policy?.resources,
+        'policy.actions': role.policy?.actions,
+        'policy.effect': role.policy?.effect,
+        updatedOn: updatedOn && updatedOn > 0 ? updatedOn : undefined,
+        updatedByUserId: role.last_update_user_id,
       },
     },
   });

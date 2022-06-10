@@ -7,13 +7,21 @@ import {
 export const Steps = {
   ORGANIZATION: 'fetch-organization',
   DATABASES: 'fetch-databases',
-  IP_ADDRESSES: 'fetch-ip-addresses',
+  ACCESS_LISTS: 'fetch-access-lists',
   USERS: 'fetch-users',
   ACCESS_ROLES: 'fetch-access-roles',
+  BUILD_USER_ROLE_RELATIONSHIPS: 'build-user-role-relationships',
+  BUILD_ACCESS_LIST_DATABASE_RELATIONSHIPS:
+    'build-access-list-database-relationships',
 };
 
 export const Entities: Record<
-  'ORGANIZATION' | 'DATABASE' | 'IP_ADDRESS' | 'USER' | 'ACCESS_ROLE',
+  | 'ORGANIZATION'
+  | 'DATABASE'
+  | 'ACCESS_LIST'
+  | 'ACCESS_LIST_ADDRESS'
+  | 'USER'
+  | 'ACCESS_ROLE',
   StepEntityMetadata
 > = {
   ORGANIZATION: {
@@ -26,10 +34,15 @@ export const Entities: Record<
     _type: 'datastax_database',
     _class: ['Database'],
   },
-  IP_ADDRESS: {
-    resourceName: 'IP Address',
-    _type: 'datastax_ip_address',
-    _class: ['IpAddress'],
+  ACCESS_LIST: {
+    resourceName: 'Access List',
+    _type: 'datastax_access_list',
+    _class: ['Configuration'],
+  },
+  ACCESS_LIST_ADDRESS: {
+    resourceName: 'Access List Address',
+    _type: 'datastax_access_list_address',
+    _class: ['Configuration'],
   },
   USER: {
     resourceName: 'User',
@@ -45,10 +58,12 @@ export const Entities: Record<
 
 export const Relationships: Record<
   | 'ORGANIZATION_HAS_DATABASE'
-  | 'DATABASE_ALLOWS_IP_ADDRESS'
   | 'ORGANIZATION_HAS_ACCESS_ROLE'
   | 'ORGANIZATION_HAS_USER'
-  | 'USER_HAS_ACCESS_ROLE',
+  | 'ORGANIZATION_HAS_ACCESS_LIST'
+  | 'ACCESS_LIST_HAS_ADDRESS'
+  | 'DATABASE_ASSIGNED_ACCESS_LIST'
+  | 'USER_ASSIGNED_ACCESS_ROLE',
   StepRelationshipMetadata
 > = {
   ORGANIZATION_HAS_DATABASE: {
@@ -57,11 +72,11 @@ export const Relationships: Record<
     _class: RelationshipClass.HAS,
     targetType: Entities.DATABASE._type,
   },
-  DATABASE_ALLOWS_IP_ADDRESS: {
-    _type: 'datastax_database_allows_ip_address',
+  DATABASE_ASSIGNED_ACCESS_LIST: {
+    _type: 'datastax_database_assigned_access_list',
     sourceType: Entities.DATABASE._type,
-    _class: RelationshipClass.ALLOWS,
-    targetType: Entities.IP_ADDRESS._type,
+    _class: RelationshipClass.ASSIGNED,
+    targetType: Entities.ACCESS_LIST._type,
   },
   ORGANIZATION_HAS_ACCESS_ROLE: {
     _type: 'datastax_organization_has_access_role',
@@ -75,10 +90,22 @@ export const Relationships: Record<
     _class: RelationshipClass.HAS,
     targetType: Entities.USER._type,
   },
-  USER_HAS_ACCESS_ROLE: {
-    _type: 'datastax_user_has_access_role',
-    sourceType: Entities.USER._type,
+  ORGANIZATION_HAS_ACCESS_LIST: {
+    _type: 'datastax_organization_has_access_list',
+    sourceType: Entities.ORGANIZATION._type,
     _class: RelationshipClass.HAS,
+    targetType: Entities.ACCESS_LIST._type,
+  },
+  ACCESS_LIST_HAS_ADDRESS: {
+    _type: 'datastax_access_list_has_address',
+    sourceType: Entities.ACCESS_LIST._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.ACCESS_LIST_ADDRESS._type,
+  },
+  USER_ASSIGNED_ACCESS_ROLE: {
+    _type: 'datastax_user_assigned_access_role',
+    sourceType: Entities.USER._type,
+    _class: RelationshipClass.ASSIGNED,
     targetType: Entities.ACCESS_ROLE._type,
   },
 };

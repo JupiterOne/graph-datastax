@@ -1,5 +1,3 @@
-// Providers often supply types with their API libraries.
-
 export interface DataStaxDatabase {
   id: string;
   ownerId: string;
@@ -72,13 +70,13 @@ export interface DataStaxDatabase {
 export interface DataStaxAccessList {
   organizationId: string;
   databaseId: string;
-  addresses: DataStaxIPAddress[];
+  addresses: DataStaxAddress[];
   configurations: {
     accessListEnabled: boolean;
   };
 }
 
-export interface DataStaxIPAddress {
+export interface DataStaxAddress {
   address: string;
   description: string;
   enabled: boolean;

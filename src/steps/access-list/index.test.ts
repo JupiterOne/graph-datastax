@@ -9,13 +9,26 @@ afterEach(async () => {
   await recording.stop();
 });
 
-test('fetch-ip-addresses', async () => {
+test('fetch-access-lists', async () => {
   recording = setupProjectRecording({
     directory: __dirname,
-    name: 'fetch-ip-addresses',
+    name: 'fetch-access-lists',
   });
 
-  const stepConfig = buildStepTestConfigForStep(Steps.IP_ADDRESSES);
+  const stepConfig = buildStepTestConfigForStep(Steps.ACCESS_LISTS);
+  const stepResult = await executeStepWithDependencies(stepConfig);
+  expect(stepResult).toMatchStepMetadata(stepConfig);
+});
+
+test('build-access-list-database-relationships', async () => {
+  recording = setupProjectRecording({
+    directory: __dirname,
+    name: 'build-access-list-database-relationships',
+  });
+
+  const stepConfig = buildStepTestConfigForStep(
+    Steps.BUILD_ACCESS_LIST_DATABASE_RELATIONSHIPS,
+  );
   const stepResult = await executeStepWithDependencies(stepConfig);
   expect(stepResult).toMatchStepMetadata(stepConfig);
 });

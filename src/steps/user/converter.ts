@@ -25,7 +25,7 @@ export function createUserEntity(user: DataStaxUser): Entity {
         email: user.Email,
         name: user.Email,
         username: user.Email,
-        active: user.Status == 'active' ? true : false,
+        active: user.Status == 'active',
       },
     },
   });
@@ -47,7 +47,7 @@ export function createUserAccessRoleRelationship(
   accessRole: Entity,
 ): Relationship {
   return createDirectRelationship({
-    _class: RelationshipClass.HAS,
+    _class: RelationshipClass.ASSIGNED,
     from: user,
     to: accessRole,
   });

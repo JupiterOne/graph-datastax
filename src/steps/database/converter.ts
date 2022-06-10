@@ -2,6 +2,7 @@ import {
   createDirectRelationship,
   createIntegrationEntity,
   Entity,
+  parseTimePropertyValue,
   Relationship,
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
@@ -14,6 +15,9 @@ export function getDatabaseKey(id: string): string {
 }
 
 export function createDatabaseEntity(database: DataStaxDatabase): Entity {
+  const createdOn = parseTimePropertyValue(database.creationTime);
+  const deletedOn = parseTimePropertyValue(database.terminationTime);
+
   return createIntegrationEntity({
     entityData: {
       source: database,
@@ -24,13 +28,24 @@ export function createDatabaseEntity(database: DataStaxDatabase): Entity {
         id: database.id,
         name: database.info.name,
         location: database.studioUrl,
-        info: JSON.stringify(database.info),
-        creationTime: database.creationTime,
-        terminationTime: database.terminationTime,
+        'info.keyspace': database.info.keyspace,
+        'info.cloudProvider': database.info.cloudProvider,
+        'info.tier': database.info.tier,
+        'info.capacityUnits': database.info.capacityUnits,
+        'info.region': database.info.region,
+        // if unix timestamp is negative, it means the action never occurred
+        createdOn: createdOn && createdOn > 0 ? createdOn : undefined,
+        deletedOn: deletedOn && deletedOn > 0 ? deletedOn : undefined,
         status: database.status,
-        storage: JSON.stringify(database.storage),
-        metrics: JSON.stringify(database.metrics),
-        cost: JSON.stringify(database.cost),
+        'storage.nodeCount': database.storage.nodeCount,
+        'storage.replicationFactor': database.storage.replicationFactor,
+        'storage.totalStorage': database.storage.totalStorage,
+        'metrics.writeRequestsTotalCount':
+          database.metrics.writeRequestsTotalCount,
+        'metrics.readRequestsTotalCount':
+          database.metrics.readRequestsTotalCount,
+        'metrics.liveDataSizeBytes': database.metrics.liveDataSizeBytes,
+        'metrics.errorsTotalCount': database.metrics.errorsTotalCount,
         availableActions: database.availableActions,
         studioUrl: database.studioUrl,
         grafanaUrl: database.grafanaUrl,

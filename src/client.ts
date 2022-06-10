@@ -10,14 +10,11 @@ import {
   DataStaxAccessList,
   DataStaxUsers,
   DataStaxRole,
+  DataStaxUser,
 } from './types';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
 
-/**
- * An APIClient maintains authentication state and provides an interface to
- * third party data APIs.
- */
 export class APIClient {
   constructor(readonly config: IntegrationConfig) {}
 
@@ -42,6 +39,7 @@ export class APIClient {
       const response = await retry(
         async () => {
           const res: Response = await fetch(uri, {
+            method,
             headers: {
               Authorization: `Bearer ${this.config.token}`,
             },
@@ -116,11 +114,11 @@ export class APIClient {
   }
 
   /**
-   * Fetch the code repositories in the provider.
+   * Iterates each database resource in the provider.
    *
    * @param iteratee receives each resource to produce entities/relationships
    */
-  public async fetchDatabases(
+  public async iterateDatabases(
     iteratee: ResourceIteratee<DataStaxDatabase>,
   ): Promise<void> {
     await this.paginatedRequest<DataStaxDatabase>(
@@ -131,16 +129,55 @@ export class APIClient {
     );
   }
 
-  public async fetchAccessLists(): Promise<DataStaxAccessList[]> {
-    return this.request(this.withBaseUri(`/v2/access-lists`), 'GET');
+  /**
+   * Iterates each access list resource in the provider.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateAccessLists(
+    iteratee: ResourceIteratee<DataStaxAccessList>,
+  ): Promise<void> {
+    const accessLists: DataStaxAccessList[] = await this.request(
+      this.withBaseUri(`/v2/access-lists`),
+      'GET',
+    );
+    for (const accessList of accessLists) {
+      await iteratee(accessList);
+    }
   }
 
-  public async fetchUsers(): Promise<DataStaxUsers> {
-    return this.request(this.withBaseUri(`/v2/organizations/users`), 'GET');
+  /**
+   * Iterates each user resource in the provider.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateUsers(
+    iteratee: ResourceIteratee<DataStaxUser>,
+  ): Promise<void> {
+    const users: DataStaxUsers = await this.request(
+      this.withBaseUri(`/v2/organizations/users`),
+      'GET',
+    );
+    for (const user of users.Users) {
+      await iteratee(user);
+    }
   }
 
-  public async fetchRoles(): Promise<DataStaxRole[]> {
-    return this.request(this.withBaseUri(`/v2/organizations/roles`), 'GET');
+  /**
+   * Iterates each role resource in the provider.
+   *
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateRoles(
+    iteratee: ResourceIteratee<DataStaxRole>,
+  ): Promise<void> {
+    const roles: DataStaxRole[] = await this.request(
+      this.withBaseUri(`/v2/organizations/roles`),
+      'GET',
+    );
+    for (const role of roles) {
+      await iteratee(role);
+    }
   }
 }
 

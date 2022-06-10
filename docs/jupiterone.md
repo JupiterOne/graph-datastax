@@ -36,18 +36,17 @@ If you need help with this integration, please contact
 3. Set the name of the custom role
 4. Check the following roles:
 
+   - View DB
+   - Read IP Access List
+   - Read User
+   - Read Organization
+   - Read Custom Role
 
-    - View DB
-    - Read IP Access List
-    - Read User
-    - Read Organization
-    - Read Custom Role
-
-3. Enable "Apply permissions to all databases in this organization"
-4. Click Create Role
-5. Go to Token Management
-6. Under Select Role, click the role you created
-7. Save the details.
+5. Enable "Apply permissions to all databases in this organization"
+6. Click Create Role
+7. Go to Token Management
+8. Under Select Role, click the role you created
+9. Save the details.
 
 ### In JupiterOne
 
@@ -72,10 +71,6 @@ following steps will be reusable; take care to be sure they remain accurate.
 
 # How to Uninstall
 
-TODO: List specific actions that must be taken to uninstall the integration.
-Many of the following steps will be reusable; take care to be sure they remain
-accurate.
-
 1. From the configuration **Gear Icon**, select **Integrations**.
 2. Scroll to the **Datastax Astra** integration tile and click it.
 3. Identify and click the **integration to delete**.
@@ -99,25 +94,28 @@ https://github.com/JupiterOne/sdk/blob/main/docs/integrations/development.md
 
 The following entities are created:
 
-| Resources    | Entity `_type`          | Entity `_class` |
-| ------------ | ----------------------- | --------------- |
-| Access Role  | `datastax_access_role`  | `AccessRole`    |
-| Database     | `datastax_database`     | `Database`      |
-| IP Address   | `datastax_ip_address`   | `IpAddress`     |
-| Organization | `datastax_organization` | `Organization`  |
-| User         | `datastax_user`         | `User`          |
+| Resources           | Entity `_type`                 | Entity `_class` |
+| ------------------- | ------------------------------ | --------------- |
+| Access List         | `datastax_access_list`         | `Configuration` |
+| Access List Address | `datastax_access_list_address` | `Configuration` |
+| Access Role         | `datastax_access_role`         | `AccessRole`    |
+| Database            | `datastax_database`            | `Database`      |
+| Organization        | `datastax_organization`        | `Organization`  |
+| User                | `datastax_user`                | `User`          |
 
 ### Relationships
 
 The following relationships are created:
 
-| Source Entity `_type`   | Relationship `_class` | Target Entity `_type`  |
-| ----------------------- | --------------------- | ---------------------- |
-| `datastax_database`     | **ALLOWS**            | `datastax_ip_address`  |
-| `datastax_organization` | **HAS**               | `datastax_database`    |
-| `datastax_organization` | **HAS**               | `datastax_database`    |
-| `datastax_organization` | **HAS**               | `datastax_user`        |
-| `datastax_user`         | **HAS**               | `datastax_access_role` |
+| Source Entity `_type`   | Relationship `_class` | Target Entity `_type`          |
+| ----------------------- | --------------------- | ------------------------------ |
+| `datastax_access_list`  | **HAS**               | `datastax_access_list_address` |
+| `datastax_database`     | **ASSIGNED**          | `datastax_access_list`         |
+| `datastax_organization` | **HAS**               | `datastax_access_list`         |
+| `datastax_organization` | **HAS**               | `datastax_database`            |
+| `datastax_organization` | **HAS**               | `datastax_database`            |
+| `datastax_organization` | **HAS**               | `datastax_user`                |
+| `datastax_user`         | **ASSIGNED**          | `datastax_access_role`         |
 
 <!--
 ********************************************************************************

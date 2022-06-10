@@ -13,18 +13,17 @@ for interacting with the Datastax resources.
 4. Set the name of the custom role
 5. Check the following roles:
 
+   - View DB
+   - Read IP Access List
+   - Read User
+   - Read Organization
+   - Read Custom Role
 
-    - View DB
-    - Read IP Access List
-    - Read User
-    - Read Organization
-    - Read Custom Role
-
-3. Enable "Apply permissions to all databases in this organization"
-4. Click Create Role
-5. Go to Token Management
-6. Under Select Role, click the role you created
-7. Save the details.
+6. Enable "Apply permissions to all databases in this organization"
+7. Click Create Role
+8. Go to Token Management
+9. Under Select Role, click the role you created
+10. Save the details.
 
 ## Authentication
 

@@ -1,12 +1,13 @@
 import {
   Entity,
+  getRawData,
   IntegrationStep,
   IntegrationStepExecutionContext,
 } from '@jupiterone/integration-sdk-core';
 
 import { createAPIClient } from '../../client';
 import { IntegrationConfig } from '../../config';
-import { DataStaxUsers } from '../../types';
+import { DataStaxUser } from '../../types';
 import { ORGANIZATION_ENTITY_KEY } from '../organization';
 import { Entities, Steps, Relationships } from '../constants';
 import { getRoleKey } from '../access-role/converter';
@@ -26,22 +27,43 @@ export async function fetchUsers({
     ORGANIZATION_ENTITY_KEY,
   )) as Entity;
 
-  const users: DataStaxUsers = await apiClient.fetchUsers();
-  for (const user of users.Users) {
+  await apiClient.iterateUsers(async (user) => {
     const userEntity = await jobState.addEntity(createUserEntity(user));
     await jobState.addRelationship(
       createOrganizationUserRelationship(organizationEntity, userEntity),
     );
+  });
+}
 
-    for (const role of user.Roles) {
-      const accessRoleEntity = await jobState.findEntity(getRoleKey(role.ID));
-      if (accessRoleEntity) {
-        await jobState.addRelationship(
-          createUserAccessRoleRelationship(userEntity, accessRoleEntity),
+export async function buildUserRoleRelationships({
+  jobState,
+  logger,
+}: IntegrationStepExecutionContext<IntegrationConfig>) {
+  await jobState.iterateEntities(
+    {
+      _type: Entities.USER._type,
+    },
+    async (userEntity) => {
+      const user = getRawData<DataStaxUser>(userEntity);
+
+      if (!user) {
+        logger.warn(
+          { _key: userEntity._key },
+          'Could not get raw data for user entity',
         );
+        return;
       }
-    }
-  }
+
+      for (const role of user.Roles) {
+        const accessRoleEntity = await jobState.findEntity(getRoleKey(role.ID));
+        if (accessRoleEntity) {
+          await jobState.addRelationship(
+            createUserAccessRoleRelationship(userEntity, accessRoleEntity),
+          );
+        }
+      }
+    },
+  );
 }
 
 export const userSteps: IntegrationStep<IntegrationConfig>[] = [
@@ -49,11 +71,16 @@ export const userSteps: IntegrationStep<IntegrationConfig>[] = [
     id: Steps.USERS,
     name: 'Fetch Users',
     entities: [Entities.USER],
-    relationships: [
-      Relationships.ORGANIZATION_HAS_USER,
-      Relationships.USER_HAS_ACCESS_ROLE,
-    ],
-    dependsOn: [Steps.ORGANIZATION, Steps.ACCESS_ROLES],
+    relationships: [Relationships.ORGANIZATION_HAS_USER],
+    dependsOn: [Steps.ORGANIZATION],
     executionHandler: fetchUsers,
+  },
+  {
+    id: Steps.BUILD_USER_ROLE_RELATIONSHIPS,
+    name: 'Build User Role Relationships',
+    entities: [],
+    relationships: [Relationships.USER_ASSIGNED_ACCESS_ROLE],
+    dependsOn: [Steps.USERS, Steps.ACCESS_ROLES],
+    executionHandler: buildUserRoleRelationships,
   },
 ];
