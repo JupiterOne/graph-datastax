@@ -6,7 +6,8 @@ import {
 import { Entities } from '../constants';
 
 export function getOrganizationKey(name: string): string {
-  return `hexnode_organization:${name.replace(' ', '_')}`;
+  const formattedName = name.replace(' ', '_');
+  return `datastax_organization:${formattedName}`;
 }
 
 export function createOrganizationEntity(organization: {

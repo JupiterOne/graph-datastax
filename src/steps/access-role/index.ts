@@ -12,7 +12,6 @@ import {
   createAccessRoleEntity,
   createOrganizationAccessRoleRelationship,
 } from './converter';
-import { DataStaxRole } from '../../types';
 
 export async function fetchAccessRoles({
   instance,
@@ -24,19 +23,18 @@ export async function fetchAccessRoles({
     ORGANIZATION_ENTITY_KEY,
   )) as Entity;
 
-  const roles: DataStaxRole[] = await apiClient.fetchRoles();
-
-  for (const role of roles) {
+  await apiClient.iterateRoles(async (role) => {
     const accessRoleEntity = await jobState.addEntity(
       createAccessRoleEntity(role),
     );
+
     await jobState.addRelationship(
       createOrganizationAccessRoleRelationship(
         organizationEntity,
         accessRoleEntity,
       ),
     );
-  }
+  });
 }
 
 export const accessRoleSteps: IntegrationStep<IntegrationConfig>[] = [

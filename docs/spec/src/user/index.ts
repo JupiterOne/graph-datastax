@@ -23,14 +23,27 @@ export const userSpec: StepSpec<IntegrationConfig>[] = [
         _class: RelationshipClass.HAS,
         targetType: 'datastax_user',
       },
+    ],
+    dependsOn: ['fetch-organization'],
+    implemented: true,
+  },
+  {
+    /**
+     * ENDPOINT:
+     * PATTERN: Build Child Relationships
+     */
+    id: 'build-user-role-relationships',
+    name: 'Build User Role Relationships',
+    entities: [],
+    relationships: [
       {
-        _type: 'datastax_user_has_access_role',
+        _type: 'datastax_user_assigned_access_role',
         sourceType: 'datastax_user',
-        _class: RelationshipClass.HAS,
+        _class: RelationshipClass.ASSIGNED,
         targetType: 'datastax_access_role',
       },
     ],
-    dependsOn: ['fetch-organization', 'fetch-access-roles'],
+    dependsOn: ['fetch-users', 'fetch-access-roles'],
     implemented: true,
   },
 ];
