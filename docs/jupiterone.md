@@ -36,18 +36,17 @@ If you need help with this integration, please contact
 3. Set the name of the custom role
 4. Check the following roles:
 
+   - View DB
+   - Read IP Access List
+   - Read User
+   - Read Organization
+   - Read Custom Role
 
-    - View DB
-    - Read IP Access List
-    - Read User
-    - Read Organization
-    - Read Custom Role
-
-3. Enable "Apply permissions to all databases in this organization"
-4. Click Create Role
-5. Go to Token Management
-6. Under Select Role, click the role you created
-7. Save the details.
+5. Enable "Apply permissions to all databases in this organization"
+6. Click Create Role
+7. Go to Token Management
+8. Under Select Role, click the role you created
+9. Save the details.
 
 ### In JupiterOne
 
