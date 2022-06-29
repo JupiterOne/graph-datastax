@@ -11,14 +11,16 @@ and this project adheres to
 ### Added
 
 - Ingest new entities
-  - `datastax_organization`
-  - `datastax_database`
-  - `datastax_ip_address`
-  - `datastax_user`
+  - `datastax_access_list`
+  - `datastax_access_list_address`
   - `datastax_access_role`
+  - `datastax_database`
+  - `datastax_organization`
+  - `datastax_user`
 - Build new relationships
+  - `datastax_access_list_has_address`
+  - `datastax_database_assigned_access_list`
+  - `datastax_organization_has_access_list`
   - `datastax_organization_has_database`
-  - `datastax_database_allows_ip_address`
-  - `datastax_organization_has_access_role`
   - `datastax_organization_has_user`
-  - `datastax_user_has_access_role`
+  - `datastax_user_assigned_access_role`

@@ -1,13 +1,13 @@
 # Development
 
-This integration focuses on [Datastax Astra](https://astra.datastax.com/) and is
+This integration focuses on [DataStax Astra](https://astra.datastax.com/) and is
 using
 [Astra DevOps API](https://docs.datastax.com/en/astra/docs/_attachments/devopsv2.html)
-for interacting with the Datastax resources.
+for interacting with the DataStax resources.
 
 ## Provider account setup
 
-1. Sign-up for a Datastax account
+1. Sign-up for a DataStax account
 2. In the dashboard, click on Current Organization > Organization Settings
 3. Go to Role Management > Add Custom Role and create a role
 4. Set the name of the custom role

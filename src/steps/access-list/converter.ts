@@ -25,6 +25,7 @@ export function createAccessListEntity(accessList: DataStaxAccessList): Entity {
           accessList.organizationId,
           accessList.databaseId,
         ),
+        category: ['application'],
         // There isn't a good way to get a name
         name: `${accessList.organizationId}:${accessList.databaseId}`,
         accessListEnabled: accessList.configurations.accessListEnabled,

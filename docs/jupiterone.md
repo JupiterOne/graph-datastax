@@ -1,16 +1,16 @@
-# Datastax Astra Integration with JupiterOne
+# DataStax Astra Integration with JupiterOne
 
-## Datastax Astra + JupiterOne Integration Benefits
+## DataStax Astra + JupiterOne Integration Benefits
 
-- Visualize Datastax Astra organization, users, roles, databases, and access
+- Visualize DataStax Astra organization, users, roles, databases, and access
   lists in the JupiterOne graph.
-- Map Datastax Astra users to employees in your JupiterOne account.
-- Monitor changes to Datastax Astra databases and users using JupiterOne alerts.
+- Map DataStax Astra users to employees in your JupiterOne account.
+- Monitor changes to DataStax Astra databases and users using JupiterOne alerts.
 
 ## How it Works
 
 - JupiterOne periodically fetches users, roles, databases, and access lists from
-  Datastax Astra to update the graph.
+  DataStax Astra to update the graph.
 - Write JupiterOne queries to review and monitor updates to the graph, or
   leverage existing queries.
 - Configure alerts to take action when JupiterOne graph changes, or leverage
@@ -18,7 +18,7 @@
 
 ## Requirements
 
-- Datastax Astra supports token authorization.
+- DataStax Astra supports token authorization.
 - JupiterOne requires a TOKEN key.
 - You must have permission in JupiterOne to install new integrations.
 
@@ -29,7 +29,7 @@ If you need help with this integration, please contact
 
 ## Integration Walkthrough
 
-### In Datastax Astra
+### In DataStax Astra
 
 1. In the dashboard, click on Current Organization > Organization Settings
 2. Go to Role Management > Add Custom Role and create a role
@@ -50,21 +50,18 @@ If you need help with this integration, please contact
 
 ### In JupiterOne
 
-TODO: List specific actions that must be taken in JupiterOne. Many of the
-following steps will be reusable; take care to be sure they remain accurate.
-
 1. From the configuration **Gear Icon**, select **Integrations**.
-2. Scroll to the **Datastax Astra** integration tile and click it.
+2. Scroll to the **DataStax Astra** integration tile and click it.
 3. Click the **Add Configuration** button and configure the following settings:
 
-- Enter the **Account Name** by which you'd like to identify this Datastax Astra
+- Enter the **Account Name** by which you'd like to identify this DataStax Astra
   account in JupiterOne. Ingested entities will have this value stored in
   `tag.AccountName` when **Tag with Account Name** is checked.
 - Enter a **Description** that will further assist your team when identifying
   the integration instance.
 - Select a **Polling Interval** that you feel is sufficient for your monitoring
   needs. You may leave this as `DISABLED` and manually execute the integration.
-- {{additional provider-specific settings}} Enter the **Datastax Astra API Key**
+- {{additional provider-specific settings}} Enter the **DataStax Astra API Key**
   generated for use by JupiterOne.
 
 4. Click **Create Configuration** once all values are provided.
@@ -72,7 +69,7 @@ following steps will be reusable; take care to be sure they remain accurate.
 # How to Uninstall
 
 1. From the configuration **Gear Icon**, select **Integrations**.
-2. Scroll to the **Datastax Astra** integration tile and click it.
+2. Scroll to the **DataStax Astra** integration tile and click it.
 3. Identify and click the **integration to delete**.
 4. Click the **trash can** icon.
 5. Click the **Remove** button to delete the integration.
@@ -96,7 +93,7 @@ The following entities are created:
 
 | Resources           | Entity `_type`                 | Entity `_class` |
 | ------------------- | ------------------------------ | --------------- |
-| Access List         | `datastax_access_list`         | `Configuration` |
+| Access List         | `datastax_access_list`         | `Firewall`      |
 | Access List Address | `datastax_access_list_address` | `Configuration` |
 | Access Role         | `datastax_access_role`         | `AccessRole`    |
 | Database            | `datastax_database`            | `Database`      |

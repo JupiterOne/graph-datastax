@@ -37,7 +37,7 @@ export const Entities: Record<
   ACCESS_LIST: {
     resourceName: 'Access List',
     _type: 'datastax_access_list',
-    _class: ['Configuration'],
+    _class: ['Firewall'],
   },
   ACCESS_LIST_ADDRESS: {
     resourceName: 'Access List Address',

@@ -13,7 +13,7 @@ export const accessListSpec: StepSpec<IntegrationConfig>[] = [
       {
         resourceName: 'Access List',
         _type: 'datastax_access_list',
-        _class: ['Configuration'],
+        _class: ['Firewall'],
       },
       {
         resourceName: 'Access List Address',
