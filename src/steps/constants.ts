@@ -5,76 +5,107 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 export const Steps = {
-  ACCOUNT: 'fetch-account',
+  ORGANIZATION: 'fetch-organization',
+  DATABASES: 'fetch-databases',
+  ACCESS_LISTS: 'fetch-access-lists',
   USERS: 'fetch-users',
-  GROUPS: 'fetch-groups',
-  GROUP_USER_RELATIONSHIPS: 'build-user-group-relationships',
+  ACCESS_ROLES: 'fetch-access-roles',
+  BUILD_USER_ROLE_RELATIONSHIPS: 'build-user-role-relationships',
+  BUILD_ACCESS_LIST_DATABASE_RELATIONSHIPS:
+    'build-access-list-database-relationships',
 };
 
 export const Entities: Record<
-  'ACCOUNT' | 'GROUP' | 'USER',
+  | 'ORGANIZATION'
+  | 'DATABASE'
+  | 'ACCESS_LIST'
+  | 'ACCESS_LIST_ADDRESS'
+  | 'USER'
+  | 'ACCESS_ROLE',
   StepEntityMetadata
 > = {
-  ACCOUNT: {
-    resourceName: 'Account',
-    _type: 'acme_account',
-    _class: ['Account'],
-    schema: {
-      properties: {
-        mfaEnabled: { type: 'boolean' },
-        manager: { type: 'string' },
-      },
-      required: ['mfaEnabled', 'manager'],
-    },
+  ORGANIZATION: {
+    resourceName: 'Organization',
+    _type: 'datastax_organization',
+    _class: ['Organization'],
   },
-  GROUP: {
-    resourceName: 'UserGroup',
-    _type: 'acme_group',
-    _class: ['UserGroup'],
-    schema: {
-      properties: {
-        email: { type: 'string' },
-        logoLink: { type: 'string' },
-      },
-      required: ['email', 'logoLink'],
-    },
+  DATABASE: {
+    resourceName: 'Database',
+    _type: 'datastax_database',
+    _class: ['Database'],
+  },
+  ACCESS_LIST: {
+    resourceName: 'Access List',
+    _type: 'datastax_access_list',
+    _class: ['Firewall'],
+  },
+  ACCESS_LIST_ADDRESS: {
+    resourceName: 'Access List Address',
+    _type: 'datastax_access_list_address',
+    _class: ['Configuration'],
   },
   USER: {
     resourceName: 'User',
-    _type: 'acme_user',
+    _type: 'datastax_user',
     _class: ['User'],
-    schema: {
-      properties: {
-        username: { type: 'string' },
-        email: { type: 'string' },
-        active: { type: 'boolean' },
-        firstName: { type: 'string' },
-      },
-      required: ['username', 'email', 'active', 'firstName'],
-    },
+  },
+  ACCESS_ROLE: {
+    resourceName: 'Access Role',
+    _type: 'datastax_access_role',
+    _class: ['AccessRole'],
   },
 };
 
 export const Relationships: Record<
-  'ACCOUNT_HAS_USER' | 'ACCOUNT_HAS_GROUP' | 'GROUP_HAS_USER',
+  | 'ORGANIZATION_HAS_DATABASE'
+  | 'ORGANIZATION_HAS_ACCESS_ROLE'
+  | 'ORGANIZATION_HAS_USER'
+  | 'ORGANIZATION_HAS_ACCESS_LIST'
+  | 'ACCESS_LIST_HAS_ADDRESS'
+  | 'DATABASE_ASSIGNED_ACCESS_LIST'
+  | 'USER_ASSIGNED_ACCESS_ROLE',
   StepRelationshipMetadata
 > = {
-  ACCOUNT_HAS_USER: {
-    _type: 'acme_account_has_user',
-    sourceType: Entities.ACCOUNT._type,
+  ORGANIZATION_HAS_DATABASE: {
+    _type: 'datastax_organization_has_database',
+    sourceType: Entities.ORGANIZATION._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.DATABASE._type,
+  },
+  DATABASE_ASSIGNED_ACCESS_LIST: {
+    _type: 'datastax_database_assigned_access_list',
+    sourceType: Entities.DATABASE._type,
+    _class: RelationshipClass.ASSIGNED,
+    targetType: Entities.ACCESS_LIST._type,
+  },
+  ORGANIZATION_HAS_ACCESS_ROLE: {
+    _type: 'datastax_organization_has_access_role',
+    sourceType: Entities.ORGANIZATION._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.DATABASE._type,
+  },
+  ORGANIZATION_HAS_USER: {
+    _type: 'datastax_organization_has_user',
+    sourceType: Entities.ORGANIZATION._type,
     _class: RelationshipClass.HAS,
     targetType: Entities.USER._type,
   },
-  ACCOUNT_HAS_GROUP: {
-    _type: 'acme_account_has_group',
-    sourceType: Entities.ACCOUNT._type,
+  ORGANIZATION_HAS_ACCESS_LIST: {
+    _type: 'datastax_organization_has_access_list',
+    sourceType: Entities.ORGANIZATION._type,
     _class: RelationshipClass.HAS,
-    targetType: Entities.GROUP._type,
+    targetType: Entities.ACCESS_LIST._type,
   },
-  GROUP_HAS_USER: {
-    _type: 'acme_group_has_user',
-    sourceType: Entities.GROUP._type,
+  ACCESS_LIST_HAS_ADDRESS: {
+    _type: 'datastax_access_list_has_address',
+    sourceType: Entities.ACCESS_LIST._type,
     _class: RelationshipClass.HAS,
-    targetType: Entities.USER._type,
+    targetType: Entities.ACCESS_LIST_ADDRESS._type,
+  },
+  USER_ASSIGNED_ACCESS_ROLE: {
+    _type: 'datastax_user_assigned_access_role',
+    sourceType: Entities.USER._type,
+    _class: RelationshipClass.ASSIGNED,
+    targetType: Entities.ACCESS_ROLE._type,
   },
 };

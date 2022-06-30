@@ -1,28 +1,33 @@
 # Development
 
-Add details here to give a brief overview of how to work with the provider APIs.
-Please reference any SDKs or API docs used to help build the integration here.
-
-## Prerequisites
-
-Supply details about software or tooling (like maybe Docker or Terraform) that
-is needed for development here.
-
-Please supply references to documentation that details how to install those
-dependencies here.
-
-Tools like Node.js and NPM are already covered in the [README](../README.md) so
-don't bother documenting that here.
+This integration focuses on [DataStax Astra](https://astra.datastax.com/) and is
+using
+[Astra DevOps API](https://docs.datastax.com/en/astra/docs/_attachments/devopsv2.html)
+for interacting with the DataStax resources.
 
 ## Provider account setup
 
-Please provide information about the steps needed to create an account with a
-provider. Images and references to a provider's documentation is very helpful
-for new developers picking up your work.
+1. Sign-up for a DataStax account
+2. In the dashboard, click on Current Organization > Organization Settings
+3. Go to Role Management > Add Custom Role and create a role
+4. Set the name of the custom role
+5. Check the following roles:
+
+   - View DB
+   - Read IP Access List
+   - Read User
+   - Read Organization
+   - Read Custom Role
+
+6. Enable "Apply permissions to all databases in this organization"
+7. Click Create Role
+8. Go to Token Management
+9. Under Select Role, click the role you created
+10. Save the details.
 
 ## Authentication
 
-Supply details here for information on how to authenticate with a provider so
-that developers have an idea of what's needed to hit APIs. It may be useful to
-provide explanations for each value specified in the
-[`IntegrationInstanceConfigFieldMap`](../src/config.ts).
+Provide the `ORANIZATION_NAME` and the `TOKEN` to the `.env`. You can use
+[`.env.example`](../.env.example) as a reference.
+
+The API Key will be used to authorize requests using token authentication.
