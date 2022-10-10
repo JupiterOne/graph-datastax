@@ -1,15 +1,14 @@
 ---
-sourceId: managed:template
+sourceId: managed:datastax
 integrationDefinitionId: '${integration_definition_id}'
-questions: []
-  # - id: integration-question-template-replace-me
-  #   title: What kinds of questions will this integration support?
-  #   description:
-  #     TODO Every integration should contribute questions! Please be carefule
-  #     to replace this before deploying the integration to JupiterOne.
-  #   queries:
-  #     - name: good
-  #       query: |
-  #         find * with _integrationDefinitionId = '${integration_definition_id}'
-  #   tags:
-  #     - template
+questions: 
+- id: managed-question-datastax-active-databases-with-available-actions-are-serviced-via-GCP.
+  title: Which Datastax active databases with available actions are serviced via the Google Cloud Platform?
+  description: Returns a list of DataStax active databases with available actions in your GCP cloud.
+  queries:
+      - name: informative
+        query: |
+          FIND * WITH _integrationType ~='stax' AND  _class != "AccessRole" AND active = true AND observedStatus ~= 'ACTIVE' AND info.cloudProvider ~= "GCP" 
+  tags:
+      - datastax
+      - database
