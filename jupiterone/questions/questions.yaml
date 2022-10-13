@@ -8,7 +8,7 @@ questions:
   queries:
       - name: informative
         query: |
-          FIND * WITH _integrationType ~='stax' AND  _class != "AccessRole" AND active = true AND observedStatus ~= 'ACTIVE' AND info.cloudProvider ~= "GCP" 
+          FIND * WITH _integrationType ~='datastax' AND  _class != "AccessRole" AND active = true AND observedStatus ~= 'ACTIVE' AND info.cloudProvider ~= "GCP" 
   tags:
       - datastax
       - database
