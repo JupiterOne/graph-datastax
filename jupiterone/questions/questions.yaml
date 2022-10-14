@@ -3,8 +3,8 @@ sourceId: managed:datastax
 integrationDefinitionId: '${integration_definition_id}'
 questions: 
 - id: managed-question-datastax-databases-with-available-actions-that-are-serviced-via-GCP
-  title: Which Datastax databases with available actions are being serviced in the GCP cloud?
-  description: Returns a list of DataStax databases with available actions in your GCP cloud.
+  title: Which Datastax databases with available actions are being serviced by GCP?
+  description: Returns a list of active DataStax databases with available actions running in a GCP cloud.
   queries:
       - name: informative
         query: |
@@ -12,7 +12,7 @@ questions:
   tags:
       - datastax
       - database
-      - GCP
+     
 
 - id: managed-question-datastax-api-roles-containing-database-policy-actions-use-graphql
   title: Which Datastax API roles containing database policy actions use GraphQL?
@@ -28,5 +28,5 @@ questions:
             db.name AS "Database Name", db.graphqlUrl AS GraphQL
   tags:
       - datastax
-      - access role 
-      - database    
+      - rbac
+      - database
